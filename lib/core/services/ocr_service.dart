@@ -48,7 +48,7 @@ class OcrService implements IOcrService {
       final raw = buffer.toString().trim();
 
       if (raw.isEmpty) {
-        throw OcrException('No text detected in the provided image.');
+        throw const OcrException('No text detected in the provided image.');
       }
 
       return raw;

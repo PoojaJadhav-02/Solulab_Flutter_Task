@@ -1,36 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../card_scanner/presentation/provider/card_scanner_provider.dart';
-import '../passbook_scanner/presentation/provider/passbook_scanner_provider.dart';
 import '../card_scanner/presentation/screens/card_scanner_screen.dart';
 import '../passbook_scanner/presentation/screens/passbook_scanner_screen.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/theme_provider.dart';
 
 /// The application's home / landing screen.
-///
-/// Presents two feature cards — Card Scanner and Passbook Scanner —
-/// each navigating to their respective scan screens with a fresh Provider.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.isDarkMode;
 
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── Premium App Bar ─────────────────────────────────────────────
           SliverAppBar(
             expandedHeight: 200,
             pinned: true,
             stretch: true,
             backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                  color: isDark ? Colors.white : Colors.black,
+                ),
+                onPressed: () => themeProvider.toggleTheme(),
+              ),
+              const SizedBox(width: 8),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               stretchModes: const [
                 StretchMode.zoomBackground,
@@ -49,13 +55,10 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-
-          // ── Body ─────────────────────────────────────────────────────────
           SliverPadding(
             padding: const EdgeInsets.all(AppConstants.paddingLarge),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                // Subtitle
                 Text(
                   AppStrings.homeSubtitle,
                   style: theme.textTheme.bodyLarge?.copyWith(
@@ -64,10 +67,7 @@ class HomeScreen extends StatelessWidget {
                         : AppTheme.lightTextSecondary,
                   ),
                 ),
-
                 const SizedBox(height: 32),
-
-                // ── Feature Cards ───────────────────────────────────────
                 _FeatureCard(
                   title: AppStrings.scanCardBtn,
                   description: AppStrings.cardScanDesc,
@@ -79,9 +79,7 @@ class HomeScreen extends StatelessWidget {
                   glowColor: AppTheme.primaryColor,
                   onTap: () => _navigateToCardScanner(context),
                 ),
-
                 const SizedBox(height: 20),
-
                 _FeatureCard(
                   title: AppStrings.scanPassbookBtn,
                   description: AppStrings.passbookScanDesc,
@@ -93,41 +91,11 @@ class HomeScreen extends StatelessWidget {
                   glowColor: AppTheme.accentColor,
                   onTap: () => _navigateToPassbookScanner(context),
                 ),
-
-                const SizedBox(height: 40),
-
-                // ── How it works section ────────────────────────────────
-                Text('How It Works', style: theme.textTheme.headlineMedium),
-                const SizedBox(height: 16),
-                const _HowItWorksStep(
-                  step: '01',
-                  title: 'Capture or Upload',
-                  description: 'Use your camera or pick from gallery.',
-                ),
-                const _HowItWorksStep(
-                  step: '02',
-                  title: 'OCR Extraction',
-                  description: 'On-device ML Kit reads the raw text.',
-                ),
-                const _HowItWorksStep(
-                  step: '03',
-                  title: 'Smart Parsing',
-                  description: 'Custom algorithms extract structured data.',
-                ),
-                const _HowItWorksStep(
-                  step: '04',
-                  title: 'View Results',
-                  description: 'Clean, formatted data shown instantly.',
-                  isLast: true,
-                ),
-
-                const SizedBox(height: 40),
-
-                // ── Footer ────────────────────────────────────────────────
+                const SizedBox(height: 48),
                 Center(
                   child: Text(
-                    '${AppStrings.appName} v${AppStrings.appVersion}\n'
-                    'All OCR processing is on-device',
+                    'OCR processing is performed on-device\n'
+                    'v${AppStrings.appVersion}',
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium,
                   ),
@@ -143,96 +111,57 @@ class HomeScreen extends StatelessWidget {
 
   void _navigateToCardScanner(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const CardScannerScreen(),
-      ),
+      MaterialPageRoute(builder: (_) => const CardScannerScreen()),
     );
   }
 
   void _navigateToPassbookScanner(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const PassbookScannerScreen(),
-      ),
+      MaterialPageRoute(builder: (_) => const PassbookScannerScreen()),
     );
   }
 }
-
-// ── App Bar Background ────────────────────────────────────────────────────────
 
 class _AppBarBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF0D0F1A), Color(0xFF161829)],
+          colors: isDark
+              ? [const Color(0xFF0D0F1A), const Color(0xFF161829)]
+              : [const Color(0xFFE0E4F5), const Color(0xFFF4F6FF)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
       ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 30,
-            right: -40,
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.primaryColor.withValues(alpha: 0.08),
+      child: Center(
+        child: Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: const LinearGradient(
+              colors: [AppTheme.primaryColor, AppTheme.primaryDark],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppTheme.primaryColor.withValues(alpha: 0.4),
+                blurRadius: 16,
               ),
-            ),
+            ],
           ),
-          Positioned(
-            bottom: -60,
-            left: -60,
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.accentColor.withValues(alpha: 0.07),
-              ),
-            ),
+          child: const Icon(
+            Icons.document_scanner_rounded,
+            color: Colors.white,
+            size: 28,
           ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 24),
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [AppTheme.primaryColor, AppTheme.primaryDark],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primaryColor.withValues(alpha: 0.4),
-                        blurRadius: 16,
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.document_scanner_rounded,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
-
-// ── Feature Card ──────────────────────────────────────────────────────────────
 
 class _FeatureCard extends StatelessWidget {
   const _FeatureCard({
@@ -313,83 +242,6 @@ class _FeatureCard extends StatelessWidget {
                 color: Colors.white60, size: 16),
           ],
         ),
-      ),
-    );
-  }
-}
-
-// ── How It Works Step ─────────────────────────────────────────────────────────
-
-class _HowItWorksStep extends StatelessWidget {
-  const _HowItWorksStep({
-    required this.step,
-    required this.title,
-    required this.description,
-    this.isLast = false,
-  });
-
-  final String step;
-  final String title;
-  final String description;
-  final bool isLast;
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppTheme.primaryColor.withValues(alpha: 0.15),
-                  border: Border.all(
-                      color: AppTheme.primaryColor.withValues(alpha: 0.4)),
-                ),
-                child: Center(
-                  child: Text(
-                    step,
-                    style: const TextStyle(
-                      color: AppTheme.primaryColor,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    width: 1.5,
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 0 : 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 7),
-                  Text(title, style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: 4),
-                  Text(description,
-                      style: Theme.of(context).textTheme.bodyMedium),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
