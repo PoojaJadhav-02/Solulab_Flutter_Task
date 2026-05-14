@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Centralised theme configuration for the OCR Scanner application.
-/// Uses a deep-navy / electric-blue palette for a premium fintech feel.
 class AppTheme {
   AppTheme._();
 

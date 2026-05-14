@@ -18,11 +18,11 @@ class PassbookScannerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppStrings.passbookScannerTitle),
-        leading: const BackButton(),
+        centerTitle: false,
         actions: [
           Consumer<PassbookScannerProvider>(
             builder: (_, provider, __) {
-              if (provider.state == ScanState.idle) return const SizedBox();
+              if (provider.state == ScanState.idle) return const SizedBox.shrink();
               return IconButton(
                 icon: const Icon(Icons.refresh_rounded),
                 tooltip: 'Scan again',
@@ -30,6 +30,7 @@ class PassbookScannerScreen extends StatelessWidget {
               );
             },
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: Consumer<PassbookScannerProvider>(

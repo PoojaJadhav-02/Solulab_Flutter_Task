@@ -144,10 +144,7 @@ class HomeScreen extends StatelessWidget {
   void _navigateToCardScanner(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ChangeNotifierProvider(
-          create: (ctx) => ctx.read<CardScannerProvider>(),
-          child: const CardScannerScreen(),
-        ),
+        builder: (_) => const CardScannerScreen(),
       ),
     );
   }
@@ -155,10 +152,7 @@ class HomeScreen extends StatelessWidget {
   void _navigateToPassbookScanner(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ChangeNotifierProvider(
-          create: (ctx) => ctx.read<PassbookScannerProvider>(),
-          child: const PassbookScannerScreen(),
-        ),
+        builder: (_) => const PassbookScannerScreen(),
       ),
     );
   }

@@ -24,13 +24,11 @@ import 'features/shared/home_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Enforce portrait orientation for consistent card scanning UX
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  // Transparent status bar
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
@@ -39,33 +37,25 @@ void main() {
   runApp(const OcrScannerApp());
 }
 
-/// Root widget of the application.
-///
-/// Sets up the dependency injection tree via [MultiProvider] at the top level
-/// so that providers are accessible throughout the entire widget tree.
-///
-/// Dependency Graph (bottom → top):
-///   OcrService → CardParserService → CardScannerRepositoryImpl
-///   → ScanCardUseCase → CardScannerProvider
-///
-///   OcrService → PassbookParserService → PassbookScannerRepositoryImpl
-///   → ScanPassbookUseCase → PassbookScannerProvider
 class OcrScannerApp extends StatelessWidget {
   const OcrScannerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Shared OCR service instance (one TextRecognizer is enough)
-    final ocrService = OcrService();
-
     return MultiProvider(
       providers: [
+        // ── Shared OCR Service ─────────────────────────────────────────
+        Provider<OcrService>(
+          create: (_) => OcrService(),
+          dispose: (_, service) => service.dispose(),
+        ),
+
         // ── Card Scanner Provider ──────────────────────────────────────
         ChangeNotifierProvider<CardScannerProvider>(
-          create: (_) => CardScannerProvider(
+          create: (context) => CardScannerProvider(
             scanCardUseCase: ScanCardUseCase(
               CardScannerRepository(
-                ocrService: ocrService,
+                ocrService: context.read<OcrService>(),
                 parserService: const CardParserService(),
               ),
             ),
@@ -74,10 +64,10 @@ class OcrScannerApp extends StatelessWidget {
 
         // ── Passbook Scanner Provider ──────────────────────────────────
         ChangeNotifierProvider<PassbookScannerProvider>(
-          create: (_) => PassbookScannerProvider(
+          create: (context) => PassbookScannerProvider(
             scanPassbookUseCase: ScanPassbookUseCase(
               PassbookScannerRepository(
-                ocrService: ocrService,
+                ocrService: context.read<OcrService>(),
                 parserService: const PassbookParserService(),
               ),
             ),
@@ -89,7 +79,7 @@ class OcrScannerApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.dark, // Default to dark for premium feel
+        themeMode: ThemeMode.dark,
         home: const HomeScreen(),
       ),
     );
