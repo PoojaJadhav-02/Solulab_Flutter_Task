@@ -1,0 +1,37 @@
+name: solulab_company_task
+description: "A Flutter OCR Scanner app for Credit/Debit Cards and Bank Passbooks."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State Management
+  provider: ^6.1.2
+
+  # OCR Text Recognition
+  google_mlkit_text_recognition: ^0.13.0
+
+  # Camera & Image
+  camera: ^0.11.0+2
+  image_picker: ^1.1.2
+
+  # Permissions
+  permission_handler: ^11.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
