@@ -7,7 +7,6 @@ import '../../domain/repositories/i_passbook_scanner_repository.dart';
 import '../../../../core/utils/enums.dart';
 import '../../../../core/constants/app_strings.dart';
 
-/// Provider (ChangeNotifier) for the Passbook Scanner feature.
 class PassbookScannerProvider extends ChangeNotifier {
   PassbookScannerProvider({required ScanPassbookUseCase scanPassbookUseCase})
       : _scanPassbookUseCase = scanPassbookUseCase;
@@ -15,13 +14,11 @@ class PassbookScannerProvider extends ChangeNotifier {
   final ScanPassbookUseCase _scanPassbookUseCase;
   final image_picker.ImagePicker _picker = image_picker.ImagePicker();
 
-  // ── State ─────────────────────────────────────────────────────────────────
   ScanState _state = ScanState.idle;
   BankDetails? _bankDetails;
   String? _errorMessage;
   String? _scannedImagePath;
 
-  // ── Getters ───────────────────────────────────────────────────────────────
   ScanState get state => _state;
   BankDetails? get bankDetails => _bankDetails;
   String? get errorMessage => _errorMessage;
@@ -32,7 +29,6 @@ class PassbookScannerProvider extends ChangeNotifier {
       _state == ScanState.extracting ||
       _state == ScanState.parsing;
 
-  // ── Public methods ────────────────────────────────────────────────────────
 
   Future<void> scanFromCamera() =>
       _pickAndScan(image_picker.ImageSource.camera);
@@ -48,7 +44,6 @@ class PassbookScannerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Private ───────────────────────────────────────────────────────────────
 
   Future<void> _pickAndScan(image_picker.ImageSource source) async {
     try {

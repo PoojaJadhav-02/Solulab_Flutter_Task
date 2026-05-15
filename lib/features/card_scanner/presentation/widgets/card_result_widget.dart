@@ -8,7 +8,6 @@ import '../../../../core/widgets/image_preview_widget.dart';
 import '../../../../core/widgets/info_row_widget.dart';
 import '../../../../core/widgets/scan_action_button.dart';
 
-/// Displays the parsed card details in a visually rich result card.
 class CardResultWidget extends StatelessWidget {
   const CardResultWidget({
     super.key,
@@ -31,18 +30,15 @@ class CardResultWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── Scanned image preview ──────────────────────────────────────
           if (imagePath != null) ...[
             ImagePreviewWidget(imagePath: imagePath!, height: 180),
             const SizedBox(height: 20),
           ],
 
-          // ── Visual card widget ─────────────────────────────────────────
           _CardVisual(cardDetails: cardDetails),
 
           const SizedBox(height: 24),
 
-          // ── Extracted details card ─────────────────────────────────────
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -55,7 +51,6 @@ class CardResultWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
                 Row(
                   children: [
                     const Icon(Icons.credit_card_rounded,
@@ -66,7 +61,6 @@ class CardResultWidget extends StatelessWidget {
                       style: theme.textTheme.titleLarge,
                     ),
                     const Spacer(),
-                    // Luhn badge
                     _LuhnBadge(isValid: cardDetails.isLuhnValid),
                   ],
                 ),
@@ -75,7 +69,6 @@ class CardResultWidget extends StatelessWidget {
                     color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
                 const SizedBox(height: 8),
 
-                // ── Card number ──────────────────────────────────────────
                 InfoRowWidget(
                   label: AppStrings.cardNumber,
                   value: cardDetails.maskedCardNumber ??
@@ -84,7 +77,6 @@ class CardResultWidget extends StatelessWidget {
                   copyable: cardDetails.maskedCardNumber != null,
                 ),
 
-                // ── Card holder ──────────────────────────────────────────
                 InfoRowWidget(
                   label: AppStrings.cardHolder,
                   value: cardDetails.cardHolderName ?? AppStrings.notDetected,
@@ -92,14 +84,12 @@ class CardResultWidget extends StatelessWidget {
                   copyable: cardDetails.cardHolderName != null,
                 ),
 
-                // ── Expiry ────────────────────────────────────────────────
                 InfoRowWidget(
                   label: AppStrings.cardExpiry,
                   value: cardDetails.expiryDate ?? AppStrings.notDetected,
                   icon: Icons.calendar_today_rounded,
                 ),
 
-                // ── Network ───────────────────────────────────────────────
                 InfoRowWidget(
                   label: AppStrings.cardNetwork,
                   value: cardDetails.cardNetwork.label,
@@ -111,7 +101,6 @@ class CardResultWidget extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // ── Scan again ─────────────────────────────────────────────────
           ScanActionButton(
             label: AppStrings.scanAgain,
             icon: Icons.document_scanner_rounded,
@@ -125,7 +114,6 @@ class CardResultWidget extends StatelessWidget {
   }
 }
 
-// ── Visual card widget ────────────────────────────────────────────────────────
 
 class _CardVisual extends StatelessWidget {
   const _CardVisual({required this.cardDetails});
@@ -154,7 +142,6 @@ class _CardVisual extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // BG circles
           Positioned(
             top: -25,
             right: -25,
@@ -174,7 +161,6 @@ class _CardVisual extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    // EMV Chip
                     Container(
                       width: 40,
                       height: 30,
@@ -186,7 +172,6 @@ class _CardVisual extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    // Network badge
                     Text(
                       cardDetails.cardNetwork.label,
                       style: const TextStyle(
@@ -281,7 +266,6 @@ class _CardVisual extends StatelessWidget {
   }
 }
 
-// ── Luhn badge ────────────────────────────────────────────────────────────────
 
 class _LuhnBadge extends StatelessWidget {
   const _LuhnBadge({required this.isValid});

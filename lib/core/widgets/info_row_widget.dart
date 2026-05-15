@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 
-/// A single info row in a result card. Shows a label, value, and optional
-/// copy-to-clipboard icon.
 class InfoRowWidget extends StatelessWidget {
   const InfoRowWidget({
     super.key,
@@ -30,13 +28,11 @@ class InfoRowWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Leading icon
           if (icon != null) ...[
             Icon(icon, size: 16, color: AppTheme.primaryColor),
             const SizedBox(width: 10),
           ],
 
-          // Label + value
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +59,6 @@ class InfoRowWidget extends StatelessWidget {
             ),
           ),
 
-          // Copy button
           if (copyable)
             GestureDetector(
               onTap: () {

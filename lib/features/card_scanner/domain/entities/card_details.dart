@@ -1,9 +1,5 @@
 import '../../../../core/utils/enums.dart';
 
-/// Immutable entity representing the structured data extracted from a
-/// payment card scan.
-///
-/// All fields are nullable because OCR may not detect every field reliably.
 class CardDetails {
   const CardDetails({
     this.rawCardNumber,
@@ -13,24 +9,17 @@ class CardDetails {
     this.isLuhnValid = false,
   });
 
-  /// The 13–19 digit card number as extracted (digits only, no spaces).
   final String? rawCardNumber;
 
-  /// Name of the card holder as printed on the card.
   final String? cardHolderName;
 
-  /// Expiry date string in normalised MM/YY format, e.g. "12/25".
   final String? expiryDate;
 
-  /// Detected card network (Visa, Mastercard, etc.).
   final CardNetwork cardNetwork;
 
-  /// Whether the card number passed the Luhn checksum.
   final bool isLuhnValid;
 
-  // ── Computed Properties ──────────────────────────────────────────────────
 
-  /// Card number formatted in groups of 4, e.g. "4532 0151 1283 0366".
   String? get formattedCardNumber {
     if (rawCardNumber == null || rawCardNumber!.isEmpty) return null;
     final digits = rawCardNumber!.replaceAll(RegExp(r'\D'), '');
@@ -42,8 +31,6 @@ class CardDetails {
     return buffer.toString();
   }
 
-  /// Card number masked so only the last 4 digits are visible:
-  /// "XXXX XXXX XXXX 1234"
   String? get maskedCardNumber {
     final formatted = formattedCardNumber;
     if (formatted == null) return null;
@@ -54,11 +41,9 @@ class CardDetails {
     return [...masked, visible].join(' ');
   }
 
-  /// Returns true only when we have enough data to display a meaningful result.
   bool get hasData =>
       rawCardNumber != null || cardHolderName != null || expiryDate != null;
 
-  // ── Equality / Copy ──────────────────────────────────────────────────────
 
   CardDetails copyWith({
     String? rawCardNumber,

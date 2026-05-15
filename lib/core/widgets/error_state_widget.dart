@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Displays an error state with an icon, a message, and an optional action
-/// button. Reused across card and passbook scanner screens.
 class ErrorStateWidget extends StatelessWidget {
   const ErrorStateWidget({
     super.key,
@@ -25,7 +23,6 @@ class ErrorStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Icon
             Container(
               width: 72,
               height: 72,
@@ -41,7 +38,6 @@ class ErrorStateWidget extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Error message
             Text(
               message,
               style: theme.textTheme.bodyLarge?.copyWith(
@@ -50,7 +46,6 @@ class ErrorStateWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
 
-            // Action button
             if (actionLabel != null && onAction != null) ...[
               const SizedBox(height: 28),
               ElevatedButton.icon(

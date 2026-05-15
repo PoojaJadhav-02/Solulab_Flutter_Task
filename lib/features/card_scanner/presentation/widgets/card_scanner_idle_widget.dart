@@ -6,9 +6,6 @@ import '../../../../core/widgets/scan_action_button.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
 
-/// Idle state widget for the card scanner — shown before any scan is initiated.
-///
-/// Presents the "Use Camera" and "From Gallery" options with a hero card preview.
 class CardScannerIdleWidget extends StatelessWidget {
   const CardScannerIdleWidget({super.key});
 
@@ -25,12 +22,10 @@ class CardScannerIdleWidget extends StatelessWidget {
         children: [
           const SizedBox(height: 16),
 
-          // ── Hero card illustration ────────────────────────────────────────
           _CreditCardIllustration(),
 
           const SizedBox(height: 36),
 
-          // ── Instructions ─────────────────────────────────────────────────
           Text(
             'Scan Your Card',
             style: theme.textTheme.headlineMedium,
@@ -46,7 +41,6 @@ class CardScannerIdleWidget extends StatelessWidget {
 
           const SizedBox(height: 36),
 
-          // ── Feature chips ─────────────────────────────────────────────────
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -62,7 +56,6 @@ class CardScannerIdleWidget extends StatelessWidget {
 
           const SizedBox(height: 40),
 
-          // ── Action buttons ─────────────────────────────────────────────────
           ScanActionButton(
             label: AppStrings.useCamera,
             icon: Icons.camera_alt_rounded,
@@ -79,7 +72,6 @@ class CardScannerIdleWidget extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // ── Privacy note ──────────────────────────────────────────────────
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -103,7 +95,6 @@ class CardScannerIdleWidget extends StatelessWidget {
   }
 }
 
-// ── Sub-widgets ──────────────────────────────────────────────────────────────
 
 class _CreditCardIllustration extends StatelessWidget {
   @override
@@ -128,7 +119,6 @@ class _CreditCardIllustration extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Background circles
           Positioned(
             top: -30,
             right: -30,
@@ -154,13 +144,11 @@ class _CreditCardIllustration extends StatelessWidget {
             ),
           ),
 
-          // Card content
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Chip + WiFi
                 Row(
                   children: [
                     Container(
@@ -181,7 +169,6 @@ class _CreditCardIllustration extends StatelessWidget {
 
                 const Spacer(),
 
-                // Masked number
                 const Text(
                   'XXXX  XXXX  XXXX  1234',
                   style: TextStyle(
@@ -195,7 +182,6 @@ class _CreditCardIllustration extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // Name + Expiry
                 Row(
                   children: [
                     Column(

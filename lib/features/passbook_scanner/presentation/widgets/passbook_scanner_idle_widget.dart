@@ -6,7 +6,6 @@ import '../../../../core/widgets/scan_action_button.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
 
-/// Idle state widget for the passbook scanner.
 class PassbookScannerIdleWidget extends StatelessWidget {
   const PassbookScannerIdleWidget({super.key});
 
@@ -23,7 +22,6 @@ class PassbookScannerIdleWidget extends StatelessWidget {
         children: [
           const SizedBox(height: 16),
 
-          // ── Passbook illustration ─────────────────────────────────────
           _PassbookIllustration(),
 
           const SizedBox(height: 36),

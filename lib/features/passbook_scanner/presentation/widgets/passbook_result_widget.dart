@@ -7,7 +7,6 @@ import '../../../../core/widgets/image_preview_widget.dart';
 import '../../../../core/widgets/info_row_widget.dart';
 import '../../../../core/widgets/scan_action_button.dart';
 
-/// Displays the parsed bank/passbook details in a structured result layout.
 class PassbookResultWidget extends StatelessWidget {
   const PassbookResultWidget({
     super.key,
@@ -30,18 +29,15 @@ class PassbookResultWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── Image preview ─────────────────────────────────────────────
           if (imagePath != null) ...[
             ImagePreviewWidget(imagePath: imagePath!, height: 180),
             const SizedBox(height: 20),
           ],
 
-          // ── Bank badge header ─────────────────────────────────────────
           _BankBadge(bankDetails: bankDetails),
 
           const SizedBox(height: 20),
 
-          // ── Details card ───────────────────────────────────────────────
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -70,7 +66,6 @@ class PassbookResultWidget extends StatelessWidget {
                     color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
                 const SizedBox(height: 8),
 
-                // ── Account Holder ────────────────────────────────────────
                 InfoRowWidget(
                   label: AppStrings.accountHolder,
                   value: bankDetails.accountHolderName ?? AppStrings.notDetected,
@@ -78,7 +73,6 @@ class PassbookResultWidget extends StatelessWidget {
                   copyable: bankDetails.accountHolderName != null,
                 ),
 
-                // ── Account Number ────────────────────────────────────────
                 InfoRowWidget(
                   label: AppStrings.accountNumber,
                   value: bankDetails.formattedAccountNumber ??
@@ -93,7 +87,6 @@ class PassbookResultWidget extends StatelessWidget {
                   ),
                 ),
 
-                // ── IFSC Code ─────────────────────────────────────────────
                 InfoRowWidget(
                   label: AppStrings.ifscCode,
                   value: bankDetails.ifscCode ?? AppStrings.notDetected,
@@ -108,7 +101,6 @@ class PassbookResultWidget extends StatelessWidget {
                   ),
                 ),
 
-                // ── Bank Name ─────────────────────────────────────────────
                 InfoRowWidget(
                   label: AppStrings.bankName,
                   value: bankDetails.bankName ?? AppStrings.notDetected,
@@ -135,7 +127,6 @@ class PassbookResultWidget extends StatelessWidget {
   }
 }
 
-// ── Bank Badge ────────────────────────────────────────────────────────────────
 
 class _BankBadge extends StatelessWidget {
   const _BankBadge({required this.bankDetails});
@@ -198,7 +189,6 @@ class _BankBadge extends StatelessWidget {
               ],
             ),
           ),
-          // Success icon
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(

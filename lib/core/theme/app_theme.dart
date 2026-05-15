@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 class AppTheme {
   AppTheme._();
 
-  // ── Palette ───────────────────────────────────────────────────────────────
   static const Color primaryColor = Color(0xFF4F6BF6);       // Electric blue
   static const Color primaryDark = Color(0xFF3A54E0);
   static const Color accentColor = Color(0xFF00D4AA);        // Teal accent
@@ -12,7 +11,6 @@ class AppTheme {
   static const Color warningColor = Color(0xFFFFB547);
   static const Color successColor = Color(0xFF39D98A);
 
-  // Dark palette
   static const Color darkBg = Color(0xFF0D0F1A);
   static const Color darkSurface = Color(0xFF161829);
   static const Color darkCard = Color(0xFF1E2035);
@@ -20,7 +18,6 @@ class AppTheme {
   static const Color darkTextPrimary = Color(0xFFF0F2FF);
   static const Color darkTextSecondary = Color(0xFF8B93C4);
 
-  // Light palette
   static const Color lightBg = Color(0xFFF4F6FF);
   static const Color lightSurface = Color(0xFFFFFFFF);
   static const Color lightCard = Color(0xFFFFFFFF);
@@ -28,7 +25,6 @@ class AppTheme {
   static const Color lightTextPrimary = Color(0xFF0D1040);
   static const Color lightTextSecondary = Color(0xFF5B6490);
 
-  // ── Text Styles ───────────────────────────────────────────────────────────
   static TextTheme _buildTextTheme(bool isDark) {
     final primaryText = isDark ? darkTextPrimary : lightTextPrimary;
     final secondaryText = isDark ? darkTextSecondary : lightTextSecondary;
@@ -90,7 +86,6 @@ class AppTheme {
     );
   }
 
-  // ── Dark Theme ────────────────────────────────────────────────────────────
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
@@ -176,7 +171,6 @@ class AppTheme {
     );
   }
 
-  // ── Light Theme ───────────────────────────────────────────────────────────
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,

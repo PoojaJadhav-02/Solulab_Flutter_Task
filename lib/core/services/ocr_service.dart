@@ -1,26 +1,13 @@
 import 'dart:io';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
-/// Abstract contract for OCR text extraction.
-///
-/// Keeping this abstract allows injecting a mock in unit tests without
-/// hitting the real ML Kit engine.
 abstract class IOcrService {
-  /// Extracts raw text from the image at [imagePath].
-  ///
-  /// Throws an [OcrException] if extraction fails.
   Future<String> extractText(String imagePath);
 
-  /// Releases any underlying resources (e.g., the ML Kit recogniser).
   void dispose();
 }
 
-// ── Concrete Implementation ─────────────────────────────────────────────────
 
-/// Implementation backed by Google ML Kit on-device text recognition.
-///
-/// Uses the [TextRecognizer] in LATIN script mode, which covers English and
-/// most European languages – sufficient for card & passbook text.
 class OcrService implements IOcrService {
   OcrService() : _recognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
@@ -37,7 +24,6 @@ class OcrService implements IOcrService {
       final inputImage = InputImage.fromFile(file);
       final recognizedText = await _recognizer.processImage(inputImage);
 
-      // Concatenate all blocks with newlines, preserving structure
       final buffer = StringBuffer();
       for (final block in recognizedText.blocks) {
         for (final line in block.lines) {
@@ -64,9 +50,7 @@ class OcrService implements IOcrService {
   }
 }
 
-// ── Exception ───────────────────────────────────────────────────────────────
 
-/// Typed exception for all OCR-related failures.
 class OcrException implements Exception {
   const OcrException(this.message);
   final String message;

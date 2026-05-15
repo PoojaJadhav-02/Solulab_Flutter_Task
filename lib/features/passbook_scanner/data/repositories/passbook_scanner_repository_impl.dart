@@ -3,9 +3,6 @@ import '../../domain/repositories/i_passbook_scanner_repository.dart';
 import '../models/passbook_parser_service.dart';
 import '../../../../core/services/ocr_service.dart';
 
-/// Concrete implementation of [IPassbookScannerRepository].
-///
-/// Orchestrates OCR extraction followed by passbook parsing.
 class PassbookScannerRepository implements IPassbookScannerRepository {
   const PassbookScannerRepository({
     required IOcrService ocrService,
@@ -19,13 +16,10 @@ class PassbookScannerRepository implements IPassbookScannerRepository {
   @override
   Future<BankDetails> scanPassbook(String imagePath) async {
     try {
-      // Step 1: Extract raw text via OCR
       final rawText = await _ocrService.extractText(imagePath);
 
-      // Step 2: Parse raw text into structured BankDetails
       final details = _parserService.parsePassbook(rawText);
 
-      // Step 3: Check we extracted at least something useful
       if (!details.hasData) {
         throw const PassbookScanException(
           'Could not detect bank information. '

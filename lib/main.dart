@@ -7,19 +7,16 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'core/constants/app_strings.dart';
 
-// Card scanner DI
 import 'features/card_scanner/data/models/card_parser_service.dart';
 import 'features/card_scanner/data/repositories/card_scanner_repository_impl.dart';
 import 'features/card_scanner/domain/usecases/scan_card_usecase.dart';
 import 'features/card_scanner/presentation/provider/card_scanner_provider.dart';
 
-// Passbook scanner DI
 import 'features/passbook_scanner/data/models/passbook_parser_service.dart';
 import 'features/passbook_scanner/data/repositories/passbook_scanner_repository_impl.dart';
 import 'features/passbook_scanner/domain/usecases/scan_passbook_usecase.dart';
 import 'features/passbook_scanner/presentation/provider/passbook_scanner_provider.dart';
 
-// Shared
 import 'features/shared/home_screen.dart';
 
 void main() {
@@ -45,13 +42,11 @@ class OcrScannerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // ── Shared OCR Service ─────────────────────────────────────────
         Provider<OcrService>(
           create: (_) => OcrService(),
           dispose: (_, service) => service.dispose(),
         ),
 
-        // ── Card Scanner Provider ──────────────────────────────────────
         ChangeNotifierProvider<CardScannerProvider>(
           create: (context) => CardScannerProvider(
             scanCardUseCase: ScanCardUseCase(
@@ -63,7 +58,6 @@ class OcrScannerApp extends StatelessWidget {
           ),
         ),
 
-        // ── Passbook Scanner Provider ──────────────────────────────────
         ChangeNotifierProvider<PassbookScannerProvider>(
           create: (context) => PassbookScannerProvider(
             scanPassbookUseCase: ScanPassbookUseCase(
@@ -75,7 +69,6 @@ class OcrScannerApp extends StatelessWidget {
           ),
         ),
 
-        // ── Theme Provider ─────────────────────────────────────────────
         ChangeNotifierProvider<ThemeProvider>(
           create: (_) => ThemeProvider(),
         ),

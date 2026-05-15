@@ -9,14 +9,6 @@ import '../../../../core/widgets/error_state_widget.dart';
 import '../../../../core/utils/enums.dart';
 import '../../../../core/constants/app_strings.dart';
 
-/// The main Card Scanner screen.
-///
-/// Uses [Consumer] to rebuild only when [CardScannerProvider] notifies.
-/// Renders a different child widget for each [ScanState]:
-///   idle     → [CardScannerIdleWidget]
-///   loading  → [ScanLoadingWidget]
-///   success  → [CardResultWidget]
-///   error    → [ErrorStateWidget]
 class CardScannerScreen extends StatelessWidget {
   const CardScannerScreen({super.key});
 
@@ -27,7 +19,6 @@ class CardScannerScreen extends StatelessWidget {
         title: const Text(AppStrings.cardScannerTitle),
         centerTitle: false,
         actions: [
-          // Reset button — only visible when not idle
           Consumer<CardScannerProvider>(
             builder: (_, provider, __) {
               if (provider.state == ScanState.idle) return const SizedBox.shrink();

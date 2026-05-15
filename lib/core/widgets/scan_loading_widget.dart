@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// A branded loading indicator shown during OCR extraction/parsing.
-///
-/// Displays a pulsing icon with a status label beneath it.
 class ScanLoadingWidget extends StatefulWidget {
   const ScanLoadingWidget({super.key, required this.statusLabel});
 

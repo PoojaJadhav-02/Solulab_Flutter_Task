@@ -1,15 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:solulab_company_task/core/utils/luhn_validator.dart';
 
-/// Unit tests for the Luhn algorithm implementation.
-///
-/// Test cases cover:
-///  • Known-valid card numbers (Visa, Mastercard, AmEx)
-///  • Known-invalid card numbers
-///  • Edge cases (empty, too short, too long, with spaces/hyphens)
 void main() {
   group('LuhnValidator', () {
-    // ── Valid card numbers ─────────────────────────────────────────────────
     group('returns true for known-valid card numbers', () {
       test('Visa 16-digit', () {
         expect(LuhnValidator.isValid('4532015112830366'), isTrue);
@@ -20,7 +13,6 @@ void main() {
       });
 
       test('Visa 16-digit alternate', () {
-        // 4539578763621486 is a well-known Luhn-valid Visa test number
         expect(LuhnValidator.isValid('4539578763621486'), isTrue);
       });
 
@@ -33,7 +25,6 @@ void main() {
       });
 
       test('American Express 15-digit', () {
-        // 378282246310005 is the canonical AmEx test number
         expect(LuhnValidator.isValid('378282246310005'), isTrue);
       });
 
@@ -50,20 +41,16 @@ void main() {
       });
     });
 
-    // ── Invalid card numbers ──────────────────────────────────────────────
     group('returns false for known-invalid card numbers', () {
       test('Sequential digits (obviously wrong)', () {
         expect(LuhnValidator.isValid('1234567890123456'), isFalse);
       });
 
       test('All zeros actually passes Luhn (sum=0, divisible by 10)', () {
-        // Mathematically 0000000000000000 passes Luhn;
-        // in practice the card parser's plausibility check rejects it.
         expect(LuhnValidator.isValid('0000000000000000'), isTrue);
       });
 
       test('Off-by-one digit mutation', () {
-        // 4532015112830366 is valid; changing last digit by 1 breaks Luhn
         expect(LuhnValidator.isValid('4532015112830367'), isFalse);
       });
 
@@ -72,7 +59,6 @@ void main() {
       });
     });
 
-    // ── Edge cases ────────────────────────────────────────────────────────
     group('edge cases', () {
       test('empty string returns false', () {
         expect(LuhnValidator.isValid(''), isFalse);
@@ -95,7 +81,6 @@ void main() {
       });
 
       test('mixed valid digits with extra spaces is accepted', () {
-        // Spaces stripped → valid 16-digit Visa
         expect(LuhnValidator.isValid('  4532 0151 1283 0366  '), isTrue);
       });
     });

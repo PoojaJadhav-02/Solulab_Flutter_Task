@@ -1,7 +1,3 @@
-/// Immutable entity representing the structured data extracted from a
-/// bank passbook or account document scan.
-///
-/// All fields are nullable because OCR may not detect every field reliably.
 class BankDetails {
   const BankDetails({
     this.accountHolderName,
@@ -10,29 +6,21 @@ class BankDetails {
     this.bankName,
   });
 
-  /// Full name of the account holder.
   final String? accountHolderName;
 
-  /// Bank account number (9–18 digits typically in India).
   final String? accountNumber;
 
-  /// Indian Financial System Code, format: 4-letter bank code + 0 + 6 chars.
-  /// Example: "SBIN0001234"
   final String? ifscCode;
 
-  /// Name of the bank (may be inferred from IFSC prefix).
   final String? bankName;
 
-  // ── Computed Properties ──────────────────────────────────────────────────
 
-  /// Returns true only when we have at least one meaningful data field.
   bool get hasData =>
       accountHolderName != null ||
       accountNumber != null ||
       ifscCode != null ||
       bankName != null;
 
-  /// Formats the account number with spaces every 4 digits for readability.
   String? get formattedAccountNumber {
     if (accountNumber == null || accountNumber!.isEmpty) return null;
     final digits = accountNumber!.replaceAll(RegExp(r'\D'), '');
@@ -44,7 +32,6 @@ class BankDetails {
     return buffer.toString();
   }
 
-  // ── Equality / Copy ──────────────────────────────────────────────────────
 
   BankDetails copyWith({
     String? accountHolderName,

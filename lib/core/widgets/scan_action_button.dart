@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// A premium pill-shaped action button with optional leading icon and gradient.
 class ScanActionButton extends StatelessWidget {
   const ScanActionButton({
     super.key,

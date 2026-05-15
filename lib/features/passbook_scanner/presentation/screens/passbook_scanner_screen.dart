@@ -9,7 +9,6 @@ import '../../../../core/widgets/error_state_widget.dart';
 import '../../../../core/utils/enums.dart';
 import '../../../../core/constants/app_strings.dart';
 
-/// The main Passbook Scanner screen.
 class PassbookScannerScreen extends StatelessWidget {
   const PassbookScannerScreen({super.key});
 

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Displays a rounded preview of the scanned image with a subtle overlay.
 class ImagePreviewWidget extends StatelessWidget {
   const ImagePreviewWidget({
     super.key,
@@ -21,7 +20,6 @@ class ImagePreviewWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(borderRadius),
       child: Stack(
         children: [
-          // Image
           Image.file(
             File(imagePath),
             width: double.infinity,
@@ -37,7 +35,6 @@ class ImagePreviewWidget extends StatelessWidget {
             ),
           ),
 
-          // Gradient overlay for label readability
           Positioned(
             bottom: 0,
             left: 0,
@@ -57,7 +54,6 @@ class ImagePreviewWidget extends StatelessWidget {
             ),
           ),
 
-          // Label
           Positioned(
             bottom: 10,
             left: 12,

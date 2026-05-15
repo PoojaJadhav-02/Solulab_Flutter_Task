@@ -3,10 +3,6 @@ import 'package:solulab_company_task/features/card_scanner/data/models/card_pars
 import 'package:solulab_company_task/features/card_scanner/domain/entities/card_details.dart';
 import 'package:solulab_company_task/core/utils/enums.dart';
 
-/// Unit tests for [CardParserService].
-///
-/// Each test uses a realistic simulated OCR string that mimics what
-/// google_mlkit_text_recognition would return for a physical card.
 void main() {
   late CardParserService parser;
 
@@ -14,10 +10,8 @@ void main() {
     parser = const CardParserService();
   });
 
-  // ── Helper ───────────────────────────────────────────────────────────────
   CardDetails parse(String rawText) => parser.parseCard(rawText);
 
-  // ── Card Number Extraction ────────────────────────────────────────────────
   group('Card Number Extraction', () {
     test('extracts grouped 16-digit Visa number', () {
       const ocr = '''
@@ -43,7 +37,6 @@ VALID THRU 12/28
     });
 
     test('fixes OCR O→0 substitution in card number', () {
-      // OCR mistake: O instead of 0 in the number
       const ocr = '4532 O151 1283 O366\nVALID THRU 12/28';
       final result = parse(ocr);
       expect(result.rawCardNumber, equals('4532015112830366'));
@@ -63,7 +56,6 @@ VALID THRU 12/28
     });
   });
 
-  // ── Expiry Date Extraction ────────────────────────────────────────────────
   group('Expiry Date Extraction', () {
     test('extracts MM/YY format', () {
       const ocr = '4111 1111 1111 1111\n12/25\nJOHN DOE';
@@ -91,7 +83,6 @@ VALID THRU 12/28
     });
   });
 
-  // ── Card Holder Extraction ────────────────────────────────────────────────
   group('Card Holder Name Extraction', () {
     test('extracts uppercase 2-word name', () {
       const ocr = '4532 0151 1283 0366\nVALID THRU 12/25\nJOHN DOE';
@@ -107,7 +98,6 @@ VALID THRU 12/28
     test('ignores VALID THRU keyword line', () {
       const ocr = '4532 0151 1283 0366\nVALID THRU\nJANE SMITH\n11/28';
       final result = parse(ocr);
-      // Should not pick "VALID THRU" as name
       expect(result.cardHolderName, isNot(equals('VALID THRU')));
     });
 
@@ -119,14 +109,11 @@ VALID THRU 12/28
 
     test('returns null when no name detectable', () {
       const ocr = '4532 0151 1283 0366\n12/25\nVISA CREDIT';
-      // VISA CREDIT may match keyword filter — should return null or filter
       final result = parse(ocr);
-      // Just verify no crash, name may or may not be null
       expect(() => result.cardHolderName, returnsNormally);
     });
   });
 
-  // ── Network Detection ──────────────────────────────────────────────────────
   group('Card Network Detection', () {
     test('detects Visa', () {
       expect(
@@ -157,7 +144,6 @@ VALID THRU 12/28
     });
 
     test('returns unknown for unrecognised prefix', () {
-      // 9-prefix is not assigned to any standard network
       expect(
         parse('9999999999999999\n12/25').cardNetwork,
         CardNetwork.unknown,
@@ -165,7 +151,6 @@ VALID THRU 12/28
     });
   });
 
-  // ── Luhn Validation ────────────────────────────────────────────────────────
   group('Luhn Validation via parseCard', () {
     test('marks valid Visa as Luhn valid', () {
       expect(
@@ -182,7 +167,6 @@ VALID THRU 12/28
     });
   });
 
-  // ── Masked Card Number ─────────────────────────────────────────────────────
   group('Masked Card Number', () {
     test('formats as XXXX XXXX XXXX 0366', () {
       final result = parse('4532 0151 1283 0366\n12/25');
@@ -190,7 +174,6 @@ VALID THRU 12/28
     });
   });
 
-  // ── Empty / Noisy Input ────────────────────────────────────────────────────
   group('Edge Cases', () {
     test('empty string returns empty CardDetails', () {
       final result = parse('');
@@ -207,7 +190,6 @@ VALID THRU 12/28
     test('duplicate lines are deduplicated', () {
       const ocr = '4532 0151 1283 0366\n4532 0151 1283 0366\nJOHN DOE\nJOHN DOE\n12/25';
       final result = parse(ocr);
-      // Parser should still find one card number, not crash
       expect(result.rawCardNumber, equals('4532015112830366'));
     });
   });

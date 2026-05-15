@@ -2,10 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:solulab_company_task/features/passbook_scanner/data/models/passbook_parser_service.dart';
 import 'package:solulab_company_task/features/passbook_scanner/domain/entities/bank_details.dart';
 
-/// Unit tests for [PassbookParserService].
-///
-/// Each test simulates realistic OCR output from an Indian bank passbook,
-/// including cases with noise, duplicates, and partial data.
 void main() {
   late PassbookParserService parser;
 
@@ -15,7 +11,6 @@ void main() {
 
   BankDetails parse(String rawText) => parser.parsePassbook(rawText);
 
-  // ── IFSC Code Extraction ───────────────────────────────────────────────────
   group('IFSC Code Extraction', () {
     test('extracts valid SBI IFSC', () {
       const ocr = '''
@@ -38,7 +33,6 @@ Name: RAMESH KUMAR
     });
 
     test('does not extract malformed IFSC (wrong format)', () {
-      // "HDFC12345" is missing the mandatory 0 at position 5
       const ocr = 'IFSC: HDFC12345\nAccount: 123456789012';
       expect(parse(ocr).ifscCode, isNull);
     });
@@ -49,7 +43,6 @@ Name: RAMESH KUMAR
     });
   });
 
-  // ── Account Number Extraction ─────────────────────────────────────────────
   group('Account Number Extraction', () {
     test('extracts labeled account number', () {
       const ocr = '''
@@ -72,7 +65,6 @@ Phone: 9876543210
 Account No: 12345678901
 IFSC: SBIN0001234
 ''';
-      // Should pick the 11-digit account number, not the 10-digit mobile
       final result = parse(ocr);
       expect(result.accountNumber, equals('12345678901'));
     });
@@ -88,12 +80,10 @@ IFSC: AXIS0001234
 
     test('returns null when no valid account number present', () {
       const ocr = 'Name: JOHN\nPhone: 9876543210\nDate: 2025';
-      // 10-digit mobile excluded, 4-digit year excluded
       expect(parse(ocr).accountNumber, isNull);
     });
   });
 
-  // ── Account Holder Name Extraction ────────────────────────────────────────
   group('Account Holder Name Extraction', () {
     test('extracts from "Name:" label', () {
       const ocr = '''
@@ -104,7 +94,6 @@ Name: RAMESH KUMAR SHARMA
 ''';
       final result = parse(ocr);
       expect(result.accountHolderName, isNotNull);
-      // Returned in title case
       expect(result.accountHolderName,
           anyOf(contains('Ramesh'), contains('RAMESH')));
     });
@@ -123,7 +112,6 @@ Name: ANIL GUPTA
 Account: 98765432101
 ''';
       final result = parse(ocr);
-      // "STATE BANK OF INDIA" should not be the holder name
       expect(result.accountHolderName, isNot(contains('STATE')));
     });
 
@@ -139,7 +127,6 @@ IFSC PUNB0123456
     });
   });
 
-  // ── Bank Name Inference ───────────────────────────────────────────────────
   group('Bank Name Inference', () {
     test('infers SBI from IFSC prefix SBIN', () {
       const ocr = 'Account: 12345678901\nIFSC: SBIN0001234';
@@ -158,12 +145,10 @@ IFSC PUNB0123456
 
     test('returns null for unknown bank', () {
       const ocr = 'Account: 12345678901\nIFSC: XXXX0123456';
-      // XXXX prefix not in mapping, no known bank text
       expect(parse(ocr).bankName, isNull);
     });
   });
 
-  // ── Edge Cases ─────────────────────────────────────────────────────────────
   group('Edge Cases', () {
     test('empty string returns empty BankDetails', () {
       final result = parse('');
@@ -190,7 +175,6 @@ Account: 12345678901
     test('formatted account number inserts spaces every 4 digits', () {
       const ocr = 'Account No: 12345678901234';
       final result = parse(ocr);
-      // 14-digit account → formatted with spaces
       expect(result.formattedAccountNumber, equals('1234 5678 9012 34'));
     });
 
